@@ -1,21 +1,34 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-ctx.fillStyle = "black";
-ctx.fillRect(0, 0, 500, 500);
 
-var colours = ["pink", "white", "blue", "purple", "green", "yellow", "black"];
-var angles = [0.1*Math.PI, 0.2*Math.PI, 0.3*Math.PI, 0.4*Math.PI, 0.5*Math.PI, 0.5*Math.PI]
+ctx.font = "50px Arial";
+ctx.fillStyle = "black";
+ctx.textAlign = "center";
+ctx.textBaseline = "top";
+ctx.fillText("What colour is your car?", 375, 25);
+
+var colours = ["yellow", "red", "gray", "black", "white", "blue", "green"];
+var data = [31, 67, 89, 104, 100, 102, 34];
+var labels = ["yellow", "red", "silver", "black", "white", "blue", "green"];
 
 var startAngle = 0;
 var endAngle = 0;
 
 var cx = 250;
-var cy = 250;
+var cy = 275;
 var r =  150;
 
-for (var i = 0; i < angles.length; i++) {
+var total = 0;
+
+for (var i = 0; i < data.length; i++) {
+	total += data[i];
+}
+
+for (var i = 0; i < data.length; i++) {
+	var p = data[i]/total;
+	
 	startAngle = endAngle;
-	endAngle += angles[i];
+	endAngle += percentageToAngle(p);
 
 	ctx.fillStyle = colours[i];
 	ctx.beginPath();
@@ -26,20 +39,30 @@ for (var i = 0; i < angles.length; i++) {
 	ctx.fill();
 
 	theta = labelAngle(startAngle, endAngle);
-	x = r * Math.cos(theta)
-	y = r * Math.sin(theta)
+	x = r * Math.cos(theta);
+	y = r * Math.sin(theta);
 
 	ctx.font = "20px Arial";
-	ctx.fillStyle = colours[i];
+	ctx.fillStyle = "black";
 	ctx.textAlign = "center";
 	ctx.textBaseline = "middle";
-	ctx.fillText(percentage(startAngle, endAngle) + "%", cx + x * 1.25, cy + y * 1.25);
+	ctx.fillText((p*100).toFixed(2) + "%", cx + x * 1.25, cy + y * 1.25);
+	
+	ctx.fillStyle = colours[i];
+	ctx.fillRect(700, 450 - i*25, 25, 25);
+	ctx.strokeRect(700, 450 - i*25, 25, 25);
+	
+	ctx.font = "20px Arial";
+	ctx.fillStyle = "black";
+	ctx.textAlign = "right";
+	ctx.textBaseline = "middle";
+	ctx.fillText(labels[i], 675, 462.5 - i*25);
 }
 
 function labelAngle(angle1, angle2) {
 	return (Math.abs(angle1 - angle2)/2)+angle1;
 }
 
-function percentage(angle1, angle2) {
-	return ((Math.abs(angle1 - angle2) * 100)/(2 * Math.PI)).toFixed(2);
+function percentageToAngle(percentage) {
+	return 2 * Math.PI * percentage;
 }
