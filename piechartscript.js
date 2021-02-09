@@ -1,6 +1,7 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
+// create title
 ctx.font = "50px Arial";
 ctx.fillStyle = "black";
 ctx.textAlign = "center";
@@ -25,11 +26,13 @@ for (var i = 0; i < data.length; i++) {
 }
 
 for (var i = 0; i < data.length; i++) {
+	// convert data to percentage
 	var p = data[i]/total;
 	
 	startAngle = endAngle;
 	endAngle += percentageToAngle(p);
-
+	
+	// create pie sector
 	ctx.fillStyle = colours[i];
 	ctx.beginPath();
 	ctx.moveTo(cx, cy);
@@ -37,21 +40,24 @@ for (var i = 0; i < data.length; i++) {
 	ctx.lineTo(cx, cy);
 	ctx.stroke();
 	ctx.fill();
-
-	theta = labelAngle(startAngle, endAngle);
+	
+	theta = middleAngle(startAngle, endAngle);
 	x = r * Math.cos(theta);
 	y = r * Math.sin(theta);
-
+	
+	// create text label for sector
 	ctx.font = "20px Arial";
 	ctx.fillStyle = "black";
 	ctx.textAlign = "center";
 	ctx.textBaseline = "middle";
 	ctx.fillText((p*100).toFixed(2) + "%", cx + x * 1.25, cy + y * 1.25);
 	
+	// create colour key
 	ctx.fillStyle = colours[i];
 	ctx.fillRect(700, 450 - i*25, 25, 25);
 	ctx.strokeRect(700, 450 - i*25, 25, 25);
 	
+	// label colour key
 	ctx.font = "20px Arial";
 	ctx.fillStyle = "black";
 	ctx.textAlign = "right";
@@ -59,7 +65,7 @@ for (var i = 0; i < data.length; i++) {
 	ctx.fillText(labels[i], 675, 462.5 - i*25);
 }
 
-function labelAngle(angle1, angle2) {
+function middleAngle(angle1, angle2) {
 	return (Math.abs(angle1 - angle2)/2)+angle1;
 }
 
